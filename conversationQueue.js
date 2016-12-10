@@ -33,11 +33,28 @@ module.exports = function(apiParams){
      }},
      {
      message:'What is your BloodPressure?',
-     end:true,
+     end:false,
      end_point_callback:function(text,bot,message) {
         apiParams.BloodPressure = parseFloat(text)
         console.log(text)
         bot.reply(message,'Thanks for your response')
+     }},
+     {
+     message:'What is your Skin Thickness?',
+     end:false,
+     end_point_callback:function(text,bot,message) {
+        apiParams.SkinThickness = parseFloat(text)
+        console.log(text)
+        bot.reply(message,'Thanks for your response')
+     }},
+      {
+     message:'What is your Age?',
+     end:true,
+     end_point_callback:function(text,bot,message) {
+        apiParams.Age = parseInt(text)
+        console.log(text)
+        bot.reply(message,'Thanks for your response')
      }}
+
   ]}
 }
