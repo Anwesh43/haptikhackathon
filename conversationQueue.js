@@ -37,7 +37,7 @@ module.exports = function(apiParams){
      end_point_callback:function(text,bot,message) {
         apiParams.BloodPressure = parseFloat(text)
         console.log(text)
-        bot.reply(message,'Thanks for your response')
+        
      }},
      {
      message:'What is your Skin Thickness?',
@@ -45,7 +45,7 @@ module.exports = function(apiParams){
      end_point_callback:function(text,bot,message) {
         apiParams.SkinThickness = parseFloat(text)
         console.log(text)
-        bot.reply(message,'Thanks for your response')
+        
      }},
       {
      message:'What is your Age?',
