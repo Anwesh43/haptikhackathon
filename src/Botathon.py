@@ -16,7 +16,11 @@ from flask import request
 import csv
 import json
 
-root_path = "C:\Botathon\haptikhackathon"
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+
+root_path = "C:\pipeybot"
 
 max_score = 0
 pickle_to_use = ''
@@ -97,6 +101,37 @@ def Test():
     prediction = clf_predict.predict(user_input['val'])
 
     return jsonify({'status': 'success', 'Prediction': str(prediction[0])})
+
+@app.route('/Plot', methods=['GET', 'POST'])
+def Plot():
+    user_input = json.loads(request.get_data())
+
+    file_path = root_path + "\datasets\diabetes.csv"
+    df = pd.read_csv(file_path)
+
+    col = user_input['column']
+    op = user_input['function']
+
+    width = 0.35  # the width of the bars
+    X = np.unique(list(df[col]))
+    global Y
+    if op == "count":
+        Y = df[col].value_counts()
+    elif op == "sum":
+        Y = df[col].sum()
+
+    fig, ax = plt.subplots()
+    ax.bar(X, Y, width, color='r')
+
+    ## add some text for labels, title and axes ticks
+    ax.set_xlabel(col)
+    ax.set_ylabel(op)
+    title = col + ' vs ' + op
+    ax.set_title(title)
+
+    plt.show()
+
+    return jsonify({'status': 'success'})
 
 if __name__ == "__main__" :
     try:
