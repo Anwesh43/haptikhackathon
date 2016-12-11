@@ -1,7 +1,15 @@
 var height = 0,weight = 0;
 var request = require('request')
+var buttonUtil = require('./create_buttons_util')
 var localApiNames = require('./localApiName')
-module.exports = function(apiParams){
+var imageAdress = 'http://anwesh43.github.io/hackathonImages/'
+module.exports = function(apiParams,controller){
+  function sendList(list,bot,message) {
+      
+      list.forEach((tip)=>{
+        bot.reply(message,tip)
+      })
+  }
   return {messages:[{
      message:"What is your weight in Kg?",
      ask:true,
@@ -81,8 +89,23 @@ module.exports = function(apiParams){
                         console.log(typeof(prediction))
                         if(prediction == "1.0") {
                            msg = "Unfortunately you are diabetic :( but don't worry as we will give you some excellent health tips"
+                           bot.reply(message,msg)
+                           var diabeticMap = {
+                             'Diet Tips':function(bot,message){
+                                  sendList(['Eat more green vegetables','Eat low calorie fruits','Take less oil in your diet','Try to avoid food rich in carbohydrates'],bot,message)
+                               },
+                             'Exercise Tips':function(bot,message) {
+                                 sendList(['Do yoga','Do cycling','Do physical exercise'],bot,message)
+                               },
+                             'Habit Changing Tips': function(bot,message) {
+                                 sendList(['Quit Smoking','Wake up early','Sleep early','Quit Alcohol'],bot,message)
+                               }
+                             }
+                             buttonUtil.createButtonsFromJson(bot,message,controller,'What type of recommendation you need?',diabeticMap)
                         }
-                        bot.reply(message,msg)
+                        else {
+                          bot.reply(message,msg)
+                        }
                     }
                     else {
                         bot.reply(message,"I couldn't determine whether you are diabetic or not")

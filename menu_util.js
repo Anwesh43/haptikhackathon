@@ -6,7 +6,7 @@ module.exports = function(bot,controller) {
 
   var startConversation = function(bot,message,apiParams) {
     var r = /^\d(\d*)$/
-    var conservationQueue = require('./conversationQueue')(apiParams)
+    var conservationQueue = require('./conversationQueue')(apiParams,controller)
     var messages = conservationQueue.messages
     bot.startConversation(message,(err,convo)=>{
         if(err == null) {
@@ -33,7 +33,7 @@ module.exports = function(bot,controller) {
                   console.log('repeat question')
                   console.log(convo)
                   convo.say('Invalid input >:O please enter a number')
-                  
+
                }
               }
               convo.ask(messageObj.message,cb)
