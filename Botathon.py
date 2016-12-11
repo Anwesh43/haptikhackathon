@@ -9,7 +9,7 @@ from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
 import pickle
-
+import numpy as np
 from flask import *
 from flask import Flask
 from flask import request
@@ -85,17 +85,18 @@ def Train():
 
     return jsonify({'status':'success', 'Algo': pickle_to_use, 'Score': max_score})
 
-@app.route('/Test', methods=['POST'])
+@app.route('/Test', methods=['GET'])
 def Test():
-    user_input = json.loads(request.get_data())
-
+    user_input = request.args
+    print user_input["Algo"]
+    print user_input['vals']
     file =  'pickel_files/' + str(user_input["Algo"]) + ".p"
 
     f = open(file,'rb')
     clf_predict = pickle.load(f)
     f.close()
 
-    prediction = clf_predict.predict(user_input['val'])
+    prediction = clf_predict.predict(np.array(json.loads(user_input['vals'])))
 
     return jsonify({'status': 'success', 'Prediction': str(prediction[0])})
 
