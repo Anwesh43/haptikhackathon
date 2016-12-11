@@ -3,12 +3,14 @@ var request = require('request')
 var localApiNames = require('./localApiName')
 module.exports = function(apiParams){
   return {messages:[{
-     message:'What is your weight in Kg?',
+     message:"What is your weight in Kg?",
+     ask:true,
      end:false,
      end_point_callback:function(text,bot,message) {
         weight = parseInt(text)
      }},{
-     message:'What is your height in cm?',
+     message:"What is your height in cm?",
+     ask:true,
      end:false,
      end_point_callback:function(text,bot,message) {
         height = parseInt(text)/100
@@ -19,34 +21,47 @@ module.exports = function(apiParams){
             bot.reply(message,`your BMI is ${bmi}`)
         }
      }},{
-     message:'What is your Insulin level?',
+     message:"What is your Insulin level?Please enter  a number or enter Skip if you don't know",
+     ask:true,
      end:false,
      end_point_callback:function(text,bot,message) {
-        apiParams.Insulin = parseInt(text)
+        if(text != "Skip") {
+            apiParams.Insulin = parseInt(text)
+        }
      }},
      {
-     message:'What is your Glucose level?',
+     message:"What is your Glucose level?Please enter a number or enter Skip if you don't know",
+     ask:true,
      end:false,
      end_point_callback:function(text,bot,message) {
-        apiParams.Glucose = parseInt(text)
+        if(text != "Skip") {
+            apiParams.Glucose = parseInt(text)
+        }
      }},
      {
-     message:'What is your BloodPressure?',
+     message:"What is your BloodPressure?Please enter number or enter Skip if you don't know",
+     ask:true,
      end:false,
      end_point_callback:function(text,bot,message) {
-        apiParams.BloodPressure = parseFloat(text)
+        if(text != "Skip") {
+            apiParams.BloodPressure = parseFloat(text)
+        }
 
      }},
      {
-     message:'What is your Skin Thickness?',
+     message:"What is your Skin Thickness?Please enter number or enter Skip if you don't know",
+     ask:true,
      end:false,
      end_point_callback:function(text,bot,message) {
-        apiParams.SkinThickness = parseFloat(text)
-        console.log(text)
+        if(text != "Skip") {
+            apiParams.SkinThickness = parseFloat(text)
+            console.log(text)
+        }
 
      }},
       {
      message:'What is your Age?',
+     ask:true,
      end:true,
      end_point_callback:function(text,bot,message) {
         apiParams.Age = parseInt(text)

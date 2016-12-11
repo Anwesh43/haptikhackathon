@@ -5,23 +5,38 @@ var buttonUtil = require('./create_buttons_util')
 module.exports = function(bot,controller) {
 
   var startConversation = function(bot,message,apiParams) {
+    var r = /^\d(\d*)$/
     var conservationQueue = require('./conversationQueue')(apiParams)
     var messages = conservationQueue.messages
     bot.startConversation(message,(err,convo)=>{
         if(err == null) {
            messages.forEach((messageObj)=>{
-              convo.ask(messageObj.message,(response,convo)=>{
+              var cb = function(response,convo){
                  bot.startTyping(message,()=>{
 
                  })
-                 messageObj.end_point_callback(response.text,bot,message)
+                 if(r.test(response.text)) {
+                    messageObj.ask = false;
+                 }
+                 if(!messageObj.ask) {
+                    messageObj.end_point_callback(response.text,bot,message)
+                  }
+                 if(!messageObj.ask) {
                  if(messageObj.end) {
                     convo.task.endImmediately()
                  }
                  else {
                    convo.next()
                  }
-              })
+               }
+               else {
+                  console.log('repeat question')
+                  console.log(convo)
+                  convo.say('Invalid input >:O please enter a number')
+                  
+               }
+              }
+              convo.ask(messageObj.message,cb)
            })
         }
     })
@@ -53,7 +68,7 @@ module.exports = function(bot,controller) {
   }
     var menuUtil = {menu_reply_map:{
       'Yes':function(bot,message){
-            bot.reply(message,'No issues we are there for you we will recommend you relevant exercise ,diet and medicine :B')
+            bot.reply(message,'No issues we are there for you we will recommend you relevant exercise ,diet and medicine B).')
             genderMenuHandler(bot,message,controller)
         },
       'No':function(bot,message) {
